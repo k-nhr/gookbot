@@ -13,7 +13,7 @@ const cfgFile = "/opt/slack-bot/cfg.json"
 func main() {
 	token := os.Getenv("SLACK_API_TOKEN")
 
-	members, err := readConf()
+	list, err := readConf()
 
 	if err != nil {
 		panic(err)
@@ -27,8 +27,8 @@ func main() {
 		case msg := <-bot.rtm.IncomingEvents:
 			switch ev := msg.Data.(type) {
 			case *slack.ConnectedEvent:
-				botID = ev.Info.User.ID
-				botName = ev.Info.User.Name
+				BotID = ev.Info.User.ID
+				BotName = ev.Info.User.Name
 				connected = true
 			}
 		}
@@ -37,7 +37,7 @@ func main() {
 		}
 	}
 
-	bot.asakai(members)
+	bot.yukai(list)
 	/*
 		gocron.Every(1).Monday().At("09:15").Do(bot.asakai, members, token)
 		gocron.Every(1).Tuesday().At("09:15").Do(bot.asakai, members, token)
@@ -49,15 +49,15 @@ func main() {
 	return
 }
 
-func readConf() ([]member, error) {
+func readConf() ([]dailyStandupInfo, error) {
 	j, err := ioutil.ReadFile(cfgFile)
 	if err != nil {
 		return nil, err
 	}
 
-	var members []member
-	if err = json.Unmarshal(j, &members); err != nil {
+	var list []dailyStandupInfo
+	if err = json.Unmarshal(j, &list); err != nil {
 		return nil, err
 	}
-	return members, nil
+	return list, nil
 }

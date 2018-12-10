@@ -4,6 +4,11 @@ import (
 	"github.com/nlopes/slack"
 )
 
+var (
+	BotID   string
+	BotName string
+)
+
 type bot struct {
 	api *slack.Client
 	rtm *slack.RTM
